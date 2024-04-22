@@ -5,5 +5,7 @@ set(CMAKE_CXX_STANDARD 26)
 
 add_executable(rgolc src/main.cpp
         src/Grid.cpp
-        src/Grid.h)
+        src/Grid.h
+        src/Simulation.cpp
+        src/Simulation.h)
 target_link_libraries(rgolc PRIVATE raylib m)
