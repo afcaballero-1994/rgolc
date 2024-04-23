@@ -9,6 +9,8 @@ enum class State{
 };
 
 struct Cell{
+    int x;
+    int y;
     State state;
     void draw(int x, int y, int lineThickness, int cellSize, Color color);
 };
@@ -16,11 +18,12 @@ struct Cell{
 class Grid{
 public:
     explicit Grid(int numCells, int cellSize);
-    Grid(Grid& c);
     [[nodiscard]] State getState(int i, int j) const;
     [[nodiscard]] int countNeighbor(int i, int j) const;
     void setState(int i, int j, State state);
     void draw();
+    Grid(Grid& c);
+
 private:
     int numcellsPerRow;
     int cellSize;
