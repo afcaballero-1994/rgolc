@@ -12,7 +12,7 @@ struct Cell{
     int x;
     int y;
     State state;
-    void draw(int x, int y, int lineThickness, int cellSize, Color color);
+    void draw(int px, int py, int lineThickness, int cellSize, Color color);
 };
 
 class Grid{

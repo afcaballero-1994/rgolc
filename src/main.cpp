@@ -4,7 +4,7 @@
 #include "Simulation.h"
 
 int main() {
-    Simulation simulation{50, 15};
+    Simulation simulation{20, 50};
     simulation.run();
     return 0;
 }

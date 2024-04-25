@@ -90,6 +90,6 @@ Grid::Grid(Grid &c) {
 }
 
 
-void Cell::draw(int x, int y, int lineThickness, int cellSize, Color color) {
-    DrawRectangle(x, y, cellSize - lineThickness, cellSize - lineThickness, color);
+void Cell::draw(int px, int py, int lineThickness, int cellSize, Color color) {
+    DrawRectangle(px, py, cellSize - lineThickness, cellSize - lineThickness, color);
 }

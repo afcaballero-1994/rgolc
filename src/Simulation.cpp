@@ -8,7 +8,7 @@ Simulation::Simulation(int cellSize, int numCells) : cellSize(cellSize), numCell
 }
 
 void Simulation::run() {
-    SetTargetFPS(5);
+    SetTargetFPS(12);
 
     constexpr Color background = {39, 39, 39, 255};
     bool isRunning = false;
@@ -32,7 +32,7 @@ Simulation::~Simulation() {
 void Simulation::update(bool isRunning) {
     int x = GetMouseX() / cellSize;
     int y = GetMouseY() / cellSize;
-    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         x = GetMouseX() / cellSize;
         y = GetMouseY() / cellSize;
         grid.setState(x, y, State::ALIVE);
@@ -54,9 +54,6 @@ void Simulation::update(bool isRunning) {
                     if (sum == 3) {
                         toBeUpdated.push_back({.x = i, .y = j, .state = State::ALIVE});
                         //tmpGrid.setState(i, j, State::ALIVE);
-                    } else {
-                        toBeUpdated.push_back({.x = i, .y = j, .state = State::DEAD});
-                        //tmpGrid.setState(i, j, State::DEAD);
                     }
                 }
             }
@@ -64,6 +61,7 @@ void Simulation::update(bool isRunning) {
         for (Cell &cel: toBeUpdated) {
             grid.setState(cel.x, cel.y, cel.state);
         }
+        toBeUpdated.clear();
 
     }
 
