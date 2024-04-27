@@ -11,13 +11,13 @@ void Simulation::run() {
     SetTargetFPS(12);
 
     constexpr Color background = {39, 39, 39, 255};
-    bool isRunning = false;
+
+
+
 
     while (!WindowShouldClose()) {
-        if (IsKeyPressed(KEY_SPACE)) {
-            isRunning = !isRunning;
-        }
-        update(isRunning);
+        inputHandling();
+        update();
         BeginDrawing();
         ClearBackground(background);
         grid.draw();
@@ -29,14 +29,8 @@ Simulation::~Simulation() {
     CloseWindow();
 }
 
-void Simulation::update(bool isRunning) {
-    int x = GetMouseX() / cellSize;
-    int y = GetMouseY() / cellSize;
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-        x = GetMouseX() / cellSize;
-        y = GetMouseY() / cellSize;
-        grid.setState(x, y, State::ALIVE);
-    }
+void Simulation::update() {
+
     std::vector<Cell> toBeUpdated;
     if (isRunning) {
         for (int i{}; i < numCells; ++i) {
@@ -66,4 +60,17 @@ void Simulation::update(bool isRunning) {
     }
 
 
+}
+
+void Simulation::inputHandling() {
+    if (IsKeyPressed(KEY_SPACE)) {
+        isRunning = !isRunning;
+    }
+    int x = GetMouseX() / cellSize;
+    int y = GetMouseY() / cellSize;
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        x = GetMouseX() / cellSize;
+        y = GetMouseY() / cellSize;
+        grid.setState(x, y, State::ALIVE);
+    }
 }

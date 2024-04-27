@@ -10,9 +10,12 @@ public:
 
     ~Simulation();
 
-    void update(bool isRunning);
+    void inputHandling();
+
+    void update();
 
 private:
+    bool isRunning = false;
     int cellSize;
     int numCells;
     Grid grid;
