@@ -10,27 +10,29 @@ inline int acpMod(int a, int b) {
 }
 
 Grid::Grid(const int numCells, const int cellSize) {
-    this->numcellsPerRow = numCells;
-    this->cellSize = cellSize;
+    this->numCells = numCells;
     grid.reserve(numCells * numCells);
 
-    for (size_t i{}; i < numcellsPerRow; ++i) {
-        for (size_t j{}; j < numcellsPerRow; ++j) {
-            grid[i * numcellsPerRow + j].state = State::DEAD;
+    for (size_t i{}; i < numCells; ++i) {
+        for (size_t j{}; j < numCells; ++j) {
+            grid[i * numCells + j].state = State::DEAD;
+            grid[i * numCells + j].x = i * cellSize;
+            grid[i * numCells + j].y = j * cellSize;
+            grid[i * numCells + j].cellSize = cellSize;
         }
     }
 }
 
 State Grid::getState(const int i, const int j) const {
-    return grid[i * numcellsPerRow + j].state;
+    return grid[i * numCells + j].state;
 }
 
 int Grid::countNeighbor(const int i, const int j) const {
-    int sum = -1;
+    int sum = 0;
     for (int x = -1; x < 2; ++x) {
         for (int y = -1; y < 2; ++y) {
-            if (grid[acpMod((i + x), numcellsPerRow) * numcellsPerRow + acpMod((j + y), numcellsPerRow)].state ==
-                State::ALIVE) {
+            if (grid[acpMod((i + x), numCells) * numCells + acpMod((j + y), numCells)].state ==
+                State::ALIVE && x != 0 && y != 0) {
                 sum += 1;
             }
         }
@@ -39,7 +41,7 @@ int Grid::countNeighbor(const int i, const int j) const {
 }
 
 void Grid::setState(const int i, const int j, State state) {
-    grid[i * numcellsPerRow + j].state = state;
+    grid[i * numCells + j].state = state;
 }
 
 void Grid::draw() {
@@ -47,33 +49,24 @@ void Grid::draw() {
     constexpr Color cellAliveColor = {166, 217, 247, 255};
     constexpr Color cellHoveredColor = {147, 104, 183, 255};
     constexpr int lineThickness = 2;
-    for (int i{}; i < numcellsPerRow; i++) {
-        for (int j{}; j < numcellsPerRow; j++) {
-            switch (grid[i * numcellsPerRow + j].state) {
+    for (int i{}; i < numCells; i++) {
+        for (int j{}; j < numCells; j++) {
+            switch (grid[i * numCells + j].state) {
                 case State::ALIVE:
-                    grid[i * numcellsPerRow + j].draw(
-                            i * cellSize,
-                            j * cellSize,
+                    grid[i * numCells + j].draw(
                             lineThickness,
-                            cellSize,
                             cellAliveColor
                     );
                     break;
                 case State::DEAD:
-                    grid[i * numcellsPerRow + j].draw(
-                            i * cellSize,
-                            j * cellSize,
+                    grid[i * numCells + j].draw(
                             lineThickness,
-                            cellSize,
                             cellDeadColor
                     );
                     break;
                 case State::HOVERED:
-                    grid[i * numcellsPerRow + j].draw(
-                            i * cellSize,
-                            j * cellSize,
+                    grid[i * numCells + j].draw(
                             lineThickness,
-                            cellSize,
                             cellHoveredColor
                     );
                     break;
@@ -83,13 +76,6 @@ void Grid::draw() {
     }
 }
 
-Grid::Grid(Grid &c) {
-    numcellsPerRow = c.numcellsPerRow;
-    cellSize = c.cellSize;
-    grid = c.grid;
-}
-
-
-void Cell::draw(int px, int py, int lineThickness, int cellSize, Color color) {
-    DrawRectangle(px, py, cellSize - lineThickness, cellSize - lineThickness, color);
+void Cell::draw(int lineThickness, Color color) const{
+    DrawRectangle(x, y, cellSize - lineThickness, cellSize - lineThickness, color);
 }

@@ -11,8 +11,9 @@ enum class State{
 struct Cell{
     int x;
     int y;
+    int cellSize;
     State state;
-    void draw(int px, int py, int lineThickness, int cellSize, Color color);
+    void draw(int lineThickness, Color color) const;
 };
 
 class Grid{
@@ -22,10 +23,8 @@ public:
     [[nodiscard]] int countNeighbor(int i, int j) const;
     void setState(int i, int j, State state);
     void draw();
-    Grid(Grid& c);
 
 private:
-    int numcellsPerRow;
-    int cellSize;
+    int numCells;
     std::vector<Cell> grid;
 };
