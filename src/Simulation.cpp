@@ -7,14 +7,12 @@ Simulation::Simulation(int cellSize, int numCells) : cellSize(cellSize), numCell
     InitWindow(cellSize * numCells, cellSize * numCells, "Game of life");
 }
 
+Grid *hola = new Grid(nullptr);
+
 void Simulation::run() {
-    SetTargetFPS(12);
+    SetTargetFPS(5);
 
     constexpr Color background = {39, 39, 39, 255};
-
-
-
-
     while (!WindowShouldClose()) {
         inputHandling();
         update();
@@ -31,34 +29,23 @@ Simulation::~Simulation() {
 
 void Simulation::update() {
 
-    std::vector<Cell> toBeUpdated;
-    if (isRunning) {
+    if(isRunning) {
         for (int i{}; i < numCells; ++i) {
             for (int j{}; j < numCells; ++j) {
                 int sum = grid.countNeighbor(i, j);
-                if (grid.getState(i, j) == State::ALIVE) {
-                    if (sum < 2 || sum > 3) {
-                        toBeUpdated.push_back({.x = i, .y = j, .state = State::DEAD});
-                        //tmpGrid.setState(i, j, State::DEAD);
-                    } else {
-                        toBeUpdated.push_back({.x = i, .y = j, .state = State::ALIVE});
-                        //tmpGrid.setState(i, j, State::ALIVE);
-                    }
-                } else {
-                    if (sum == 3) {
-                        toBeUpdated.push_back({.x = i, .y = j, .state = State::ALIVE});
-                        //tmpGrid.setState(i, j, State::ALIVE);
-                    }
+                if (grid.getState(i, j) && sum < 2) {
+                    grid.setState(i, j, false);
+                } else if (grid.getState(i, j) && sum > 3) {
+                    grid.setState(i, j, false);
+                } else if (!grid.getState(i, j) && sum == 3) {
+                    grid.setState(i, j, true);
                 }
             }
         }
-        for (Cell &cel: toBeUpdated) {
-            grid.setState(cel.x, cel.y, cel.state);
-        }
-        toBeUpdated.clear();
+        grid.updateState();
+
 
     }
-
 
 }
 
@@ -71,6 +58,6 @@ void Simulation::inputHandling() {
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         x = GetMouseX() / cellSize;
         y = GetMouseY() / cellSize;
-        grid.setState(x, y, State::ALIVE);
+        grid.setState(x, y, true);
     }
 }
